@@ -43,6 +43,8 @@ Key concepts that we mention below will be defined here:
 * `Confirmed` - Many actions in Peggy require RLP encoded signatures to be submitted by the `Orchestrators`, an operation is `Confirmed` when it is possible to execute it on Ethereum by collecting and submitting these RLP encoded signatures representing 66% of all voting power encoded in the `Last Valset`.
 * `Observed` - events on Ethereum are considered `Observed` when 66% of the active Cosmos validator set during a given block has submitted an oracle message attesting to seeing the event. Note this is distinct from `Confirmed`! At any given time the set of who can `Observe` an event and who can `Confirm` and event will be slightly different. Since `Confirmed` is based off of the `Last ValSet` and `Observed` is always up to date with the latest validator set.
 
+* `Claim` - an Ethereum event signed and submitted to cosmos by a single `Orchestrator` instance 
+* `Attestation` - aggregate of claims that eventually becomes `observed` by all orchestrators
 
 The *Operator* is the key unit of trust here. Each operator is responsible for maintaining 3 secure processes:
 
