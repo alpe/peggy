@@ -16,15 +16,20 @@ type Keeper struct {
 
 	storeKey sdk.StoreKey // Unexposed key to access store from sdk.Context
 
-	cdc *codec.Codec // The wire codec for binary encoding/decoding.
+	cdc           *codec.Codec // The wire codec for binary encoding/decoding.
+	supplyKeeper  SupplyKeeper
+	accountKeeper AccountKeeper
 }
 
-// NewKeeper creates new instances of the nameservice Keeper
-func NewKeeper(cdc *codec.Codec, storeKey sdk.StoreKey, stakingKeeper types.StakingKeeper) Keeper {
+// NewKeeper
+func NewKeeper(cdc *codec.Codec, storeKey sdk.StoreKey, stakingKeeper types.StakingKeeper,
+	supplyKeeper SupplyKeeper, accountKeeper AccountKeeper) Keeper {
 	return Keeper{
 		cdc:           cdc,
 		storeKey:      storeKey,
 		StakingKeeper: stakingKeeper,
+		supplyKeeper:  supplyKeeper,
+		accountKeeper: accountKeeper,
 	}
 }
 
@@ -142,8 +147,8 @@ func (k Keeper) GetCurrentValset(ctx sdk.Context) types.Valset {
 	return valset
 }
 
-// prefixRange turns a prefix into a (start, end) range. The start is the given prefix value and
-// the end is calculated by adding 1 bit to the start value. Nil is not allowed as prefix.
+// prefixRange turns a voucherPrefix into a (start, end) range. The start is the given voucherPrefix value and
+// the end is calculated by adding 1 bit to the start value. Nil is not allowed as voucherPrefix.
 // 		Example: []byte{1, 3, 4} becomes []byte{1, 3, 5}
 // 				 []byte{15, 42, 255, 255} becomes []byte{15, 43, 0, 0}
 //
@@ -154,12 +159,12 @@ func prefixRange(prefix []byte) ([]byte, []byte) {
 	if prefix == nil {
 		panic("nil key not allowed")
 	}
-	// special case: no prefix is whole range
+	// special case: no voucherPrefix is whole range
 	if len(prefix) == 0 {
 		return nil, nil
 	}
 
-	// copy the prefix and update last byte
+	// copy the voucherPrefix and update last byte
 	end := make([]byte, len(prefix))
 	copy(end, prefix)
 	l := len(end) - 1

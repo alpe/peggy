@@ -18,4 +18,7 @@ func RegisterCodec(cdc *codec.Codec) {
 	cdc.RegisterConcrete(MsgValsetConfirm{}, "peggy/MsgValsetConfirm", nil)
 
 	cdc.RegisterConcrete(Valset{}, "peggy/Valset", nil)
+	cdc.RegisterConcrete(OutgoingTx{}, "peggy/OutgoingTx", nil)
+	cdc.RegisterConcrete(BridgedDenominator{}, "peggy/BridgedDenominator", nil)
+	cdc.RegisterConcrete(IDSet{}, "peggy/IDSet", nil)
 }
